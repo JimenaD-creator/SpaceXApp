@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
 
     // Compose navigation
-    implementation("android.navigaction:navigation-compose:2.5.3")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
 
     // Lifecycle and ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
@@ -81,9 +81,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     // Room (Database)
-    implementation("androidx.room:room-runtime:2.5.2")
-    implementation("androidx.room:room-ktx:2.5.2")
-    ksp("androidx.room:room-compiler:2.5.2")
+    implementation("androidx.room:room-runtime:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+    ksp("androidx.room:room-compiler:2.8.4")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
