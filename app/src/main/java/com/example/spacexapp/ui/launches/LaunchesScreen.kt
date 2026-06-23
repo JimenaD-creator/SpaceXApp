@@ -1,6 +1,5 @@
 package com.example.spacexapp.ui.launches
 
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -51,12 +50,26 @@ fun LaunchesScreen(
                 }
             )
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = { viewModel.refreshLaunches() }
-        ){
-            when{
+        ) {
+            when {
+                // Show error only if no cached data available
+                uiState.value.error != null && uiState.value.launches.isEmpty() -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Error loading launches:\n${uiState.value.error}\n\nPull down to retry",
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                }
                 uiState.value.isLoading && uiState.value.launches.isEmpty() -> {
                     Box(
                         modifier = Modifier
@@ -67,20 +80,8 @@ fun LaunchesScreen(
                         CircularProgressIndicator()
                     }
                 }
-                uiState.value.error != null && uiState.value.launches.isEmpty() -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Error: ${uiState.value.error}",
-                            modifier = Modifier.padding(16.dp)
-                        )
-                    }
-                }
 
+                // Always show cached data when available
                 else -> {
                     LazyColumn(
                         modifier = Modifier
@@ -89,19 +90,16 @@ fun LaunchesScreen(
                     ) {
                         items(
                             items = uiState.value.launches,
-                            key = {it.id}
-                        ){
-                            launch ->
+                            key = { it.id }
+                        ) { launch ->
                             LaunchCard(
                                 launch = launch,
                                 onClick = { onLaunchClick(launch.id) }
                             )
-
-                            }
                         }
                     }
                 }
-
             }
         }
     }
+}
